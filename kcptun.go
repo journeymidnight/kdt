@@ -132,7 +132,7 @@ func CreateKCPStreamListener(config *ServerConfig, block kcp.BlockCrypt) (*KCPSt
     }
 
 	if err := lis.SetDSCP(config.DSCP); err != nil {
-		log.Println("SetDSCP:", err)
+		log.Println("SetDSCP:", err, config.DSCP)
 	}
 	if err := lis.SetReadBuffer(config.SockBuf); err != nil {
 		log.Println("SetReadBuffer:", err)
@@ -173,7 +173,7 @@ func dialKcp(config *ClientConfig, block kcp.BlockCrypt) (net.Conn, error) {
 	kcpconn.SetKeepAlive(config.KeepAlive)
 
 	if err := kcpconn.SetDSCP(config.DSCP); err != nil {
-		log.Println("SetDSCP:", err)
+		log.Println("SetDSCP:", err, config.DSCP)
 	}
 	if err := kcpconn.SetReadBuffer(config.SockBuf); err != nil {
 		log.Println("SetReadBuffer:", err)

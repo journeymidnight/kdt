@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
     "time"
     "log"
     "os"
@@ -16,25 +17,31 @@ const (
 	SALT = "lectpkdt"
 )
 
-func onProgress(client *kdt.Client, total int64, ptimes int) {
+func onProgress(client *kdt.Client, starttime time.Time, offset int64, transferred int64, total int64, ptimes int) {
 	if ptimes % 1000 == 1 {
-		usedTime := 1000.0 * float64(time.Since(client.StartTime)) / float64(time.Second)
-		speed := float64(total) / usedTime
-		log.Println("onProgress", total, usedTime, speed)
+		usedTime := 1000.0 * float64(time.Since(starttime)) / float64(time.Second)
+		speed := float64(transferred) / usedTime
+		percent := float64(offset + transferred) * 100.0 / float64(total)
+		log.Printf("onProgress percent=%.02f%% totaltransfered=%d offset=%d transfered=%d total=%d usedtime=%.2fms speed=%.2fMB/s\n", percent, offset + transferred, offset, transferred, total, usedTime, speed)
 	}
 }
 
 func runClient(c *cli.Context) error {
-    log.Println("runClient")
+    log.Println("runClient", c.NArg(), c.Args())
 	config := &kdt.ClientConfig{}
 	err := config.Init(c)
     client := kdt.CreateClient(config)
 	ptimes := 0
-	client.Callback = func (total int64) {
-		onProgress(client, total, ptimes)
+	starttime := time.Now()
+	client.Callback = func (offset, transferred, total int64) {
+		onProgress(client, starttime, offset, transferred, total, ptimes)
 		ptimes += 1
 	}
-    input := c.String("input")
+	if c.NArg() != 1 {
+		log.Println("runClient invalid argument", c.Args)
+		return errors.New("runClient invalid argument")
+	}
+    input := c.Args()[0]
     err = client.SendFile(input)
 
     log.Println("runClient ok", client, err)
@@ -45,8 +52,7 @@ func runServer(c *cli.Context) error {
     log.Println("runServer")
 	config := &kdt.ServerConfig{}
 	err := config.Init(c)
-    block := config.CreateBlockCrypt()
-    server, err := kdt.ReceiveFiles(config, block)
+    server, err := kdt.ReceiveFiles(config)
     log.Println("runServer ok", server, err)
     return err
 }

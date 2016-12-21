@@ -2,13 +2,13 @@ package kdt
 
 import "github.com/urfave/cli"
 
-func createFlags() []cli.Flag {
+func createCommonFlags() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:   "key",
 			Value:  "it's a kcp secrect",
 			Usage:  "pre-shared secret between client and server",
-			EnvVar: "KCPTUN_KEY",
+			EnvVar: "LEKCPTUN_KEY",
 		},
 		cli.StringFlag{
 			Name:  "crypt",
@@ -42,7 +42,7 @@ func createFlags() []cli.Flag {
 		},
 		cli.BoolFlag{
 			Name:  "comp",
-			Usage: "disable compression",
+			Usage: "enable compression",
 		},
 		cli.BoolFlag{
 			Name:   "acknodelay",
@@ -52,22 +52,22 @@ func createFlags() []cli.Flag {
 		cli.IntFlag{
 			Name:   "nodelay",
 			Value:  0,
-			Hidden: true,
+			Hidden: false,
 		},
 		cli.IntFlag{
 			Name:   "interval",
 			Value:  40,
-			Hidden: true,
+			Hidden: false,
 		},
 		cli.IntFlag{
 			Name:   "resend",
 			Value:  0,
-			Hidden: true,
+			Hidden: false,
 		},
 		cli.IntFlag{
 			Name:   "nc",
 			Value:  0,
-			Hidden: true,
+			Hidden: false,
 		},
 		cli.IntFlag{
 			Name:   "sockbuf",
@@ -89,6 +89,11 @@ func createFlags() []cli.Flag {
 			Value: "", // when the value is not empty, the config path must exists
 			Usage: "config from json file, which will override the command from shell",
 		},
+		cli.StringFlag{
+			Name:  "transfer_id",
+			Value: "",
+			Usage: "transfer id",
+		},
 	}
 }
 
@@ -104,26 +109,11 @@ func concatFlags(x []cli.Flag, y []cli.Flag) []cli.Flag {
 }
 
 func CreateClientFlags() []cli.Flag {
-	return concatFlags(createFlags(), []cli.Flag{
+	return concatFlags(createCommonFlags(), []cli.Flag{
 		cli.StringFlag{
 			Name:  "remoteaddr, r",
 			Value: "vps:29900",
 			Usage: "kcp server address",
-		},
-		cli.StringFlag{
-			Name:  "url, u",
-			Value: "",
-			Usage: "url string",
-		},
-		cli.StringFlag{
-			Name:  "output, o",
-			Value: "",
-			Usage: "output string",
-		},
-		cli.StringFlag{
-			Name:  "input, i",
-			Value: "",
-			Usage: "input string",
 		},
 		cli.IntFlag{
 			Name:  "conn",
@@ -145,15 +135,11 @@ func CreateClientFlags() []cli.Flag {
 			Value: 1024,
 			Usage: "set receive window size(num of packets)",
 		},
-		cli.BoolFlag{
-			Name:  "overwrite",
-			Usage: "overwrite file",
-		},
 	})
 }
 
 func CreateServerFlags() []cli.Flag {
-	return concatFlags(createFlags(), []cli.Flag{
+	return concatFlags(createCommonFlags(), []cli.Flag{
 		cli.StringFlag{
 			Name:  "listen,l",
 			Value: ":29900",

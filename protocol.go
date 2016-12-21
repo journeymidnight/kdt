@@ -27,3 +27,15 @@ func (fi *FileInfoResponse) Encode() string {
     buf, _ := json.Marshal(fi)
     return string(buf)
 }
+
+type ProgressCallback func(int64, int64, int64)
+
+func NoopProgressCallback(offset, transferred, total int64) { }
+
+func Version() string {
+    return "0.1"
+}
+
+func ProtocolVersion() int {
+    return 1
+}
