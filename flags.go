@@ -112,7 +112,7 @@ func CreateClientFlags() []cli.Flag {
 	return concatFlags(createCommonFlags(), []cli.Flag{
 		cli.StringFlag{
 			Name:  "remoteaddr, r",
-			Value: "vps:29900",
+			Value: "",
 			Usage: "kcp server address",
 		},
 		cli.IntFlag{

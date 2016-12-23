@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"flag"
+	"strconv"
 
 	"github.com/urfave/cli"
 	kcp "github.com/xtaci/kcp-go"
@@ -44,6 +45,8 @@ type ClientConfig struct {
 	Conn       	int    `json:"conn"`
 	AutoExpire  int    `json:"autoexpire"`
 	Directory	string
+	Destination	string
+	StartPort   int
 }
 
 // ServerConfig for server
@@ -87,6 +90,7 @@ func CreateClientConfig() *ClientConfig {
 		Conn: 1,
 		AutoExpire: 0,
 		Directory: "",
+		StartPort: 8223,
 	}
 }
 
@@ -110,7 +114,7 @@ func parseJSONConfig(config *Config, path string) error {
 	return json.NewDecoder(file).Decode(config)
 }
 
-func (config *Config) Revise() {
+func (config *Config) ReviseConfig() {
 	switch config.Mode {
 	case "normal":
 		config.NoDelay, config.Interval, config.Resend, config.NoCongestion = 0, 30, 2, 1
@@ -122,6 +126,17 @@ func (config *Config) Revise() {
 		config.NoDelay, config.Interval, config.Resend, config.NoCongestion = 1, 10, 2, 1
 	}
 
+}
+
+func (config *ServerConfig) Revise() {
+	config.Config.ReviseConfig()
+}
+
+func (config *ClientConfig) Revise() {
+	config.Config.ReviseConfig()
+	if config.RemoteAddr == "" && config.Destination != "" {
+		config.RemoteAddr = config.Destination + ":" + strconv.Itoa(config.StartPort)
+	}
 }
 
 func initConfig(config *Config, c *cli.Context) error {
@@ -162,7 +177,6 @@ func initConfig(config *Config, c *cli.Context) error {
 		defer f.Close()
 		log.SetOutput(f)
 	}
-	config.Revise()
 	//log.Println("version:", VERSION)
     return nil
 }
@@ -223,6 +237,7 @@ func (config *ClientConfig) Init(c *cli.Context) error {
 	config.Conn = c.Int("conn")
 	config.AutoExpire = c.Int("autoexpire")
 	err := initConfig(&config.Config, c)
+	config.Revise()
 	config.Log()
 	return err
 }
@@ -231,6 +246,7 @@ func (config *ServerConfig) Init(c *cli.Context) error {
 	config.Listen = c.String("listen")
 	config.Root = c.String("root")
 	err := initConfig(&config.Config, c)
+	config.Revise()
 	config.Log()
 	return err
 }
@@ -292,7 +308,8 @@ func (config *ServerConfig) CreateFlagSet() *flag.FlagSet {
 
 func (config *ClientConfig) CreateWdtFlagSet() *flag.FlagSet {
 	set := config.Config.createCommonFlagSet()
-	set.StringVar(&config.RemoteAddr, "destination", config.RemoteAddr, "destination receiver address")
+	set.StringVar(&config.Destination, "destination", config.Destination, "destination receiver address")
+	set.IntVar(&config.StartPort, "start_port", config.StartPort, "destination receiver port")
 	set.IntVar(&config.Conn, "conn", config.Conn, "set num of UDP connections to server")
 	set.IntVar(&config.AutoExpire, "autoexpire", config.AutoExpire, "set auto expiration time(in seconds) for a single UDP connection, 0 to disable")
 	set.StringVar(&config.Directory, "directory", config.Directory, "base directory for sending file")
