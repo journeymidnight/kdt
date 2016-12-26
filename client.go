@@ -83,6 +83,9 @@ func (client *Client) doInitUpload(filename string) (*FileInfoResponse, error) {
 	log.Println("decodeFileInfo", info, err)
 	if err != nil || info == nil {
 		log.Println("doInitUpload failed with error", info, err)
+		if err == nil {
+			err = errors.New("failed to get file info")
+		}
 		return nil, err
 	}
 	if info.Code != 0 {
@@ -152,8 +155,12 @@ func (client *Client) SendFile(filepath string) error {
 	log.Println("query file info result:", filepath, info, err)
 	// if info == nil || err != nil {
 	if info == nil {
-		log.Println("query file info no info", filepath, info, err)
-		return nil
+		msg := "query file info no info"
+		log.Println(msg, filepath, info, err)
+		if err != nil {
+			msg = msg + ": " + err.Error()
+		}
+		return errors.New(msg)
 	}
 	if info.Finished {
 		log.Println("file is already uploaded", filepath, info.Size, err)
