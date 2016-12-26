@@ -199,13 +199,13 @@ func ReceiveFiles(config *ServerConfig) (*Server, error) {
 		return nil, err
 	}
 	log.Println("kcp stream listener is created")
-    tcpListener, err := net.Listen("tcp", config.Listen)
-	if err != nil {
-		log.Println("failed to listen on kcp stream", err)
-		return nil, err
-	}
-	log.Println("listen on kcp stream", config.Listen)
-    server := &Server{config:config, kcpListener:slis, tcpListener:tcpListener}
+    // tcpListener, err := net.Listen("tcp", config.Listen)
+	// if err != nil {
+	// 	log.Println("failed to listen on kcp stream", err)
+	// 	return nil, err
+	// }
+	// log.Println("listen on kcp stream", config.Listen)
+    server := &Server{config:config, kcpListener:slis, tcpListener:nil}
 	mux := http.NewServeMux()
 	// mux.Handle("/", http.FileServer(http.Dir("./")))
 	mux.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir(config.Root))))
