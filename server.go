@@ -12,6 +12,7 @@ import (
     "net/url"
 	"encoding/json"
 	"strconv"
+	"sync"
 )
 
 type Server struct {
@@ -19,6 +20,8 @@ type Server struct {
     kcpListener *KCPStreamListener
     tcpListener net.Listener
 	root string
+	lock sync.Mutex
+	requests map[*http.Request]*http.Request
 }
 
 func sendResponse(writer http.ResponseWriter, body interface{}) {
@@ -34,6 +37,24 @@ func sendResponse(writer http.ResponseWriter, body interface{}) {
 func (server *Server) Close() {
 	err := server.kcpListener.Close()
 	log.Println("Server.Close", err)
+}
+
+func (server *Server) GetPendingRequestCount() int {
+	server.lock.Lock()
+	defer server.lock.Unlock()
+	return len(server.requests)
+}
+
+func (server *Server) addRequest(req *http.Request) {
+	server.lock.Lock()
+	defer server.lock.Unlock()
+	server.requests[req] = req
+}
+
+func (server *Server) removeRequest(req *http.Request) {
+	server.lock.Lock()
+	defer server.lock.Unlock()
+	delete(server.requests, req)
 }
 
 func (server *Server) handleUploadInit(writer http.ResponseWriter, req *http.Request) {
@@ -81,6 +102,8 @@ func (server *Server) handleUploadInit(writer http.ResponseWriter, req *http.Req
 }
 
 func (server *Server) handleUpload(writer http.ResponseWriter, req *http.Request) {
+	server.addRequest(req)
+	defer server.removeRequest(req)
     log.Println("handleUpload", writer, req)
 	startTime := time.Now()
 	params, err := url.ParseQuery(req.URL.RawQuery)
@@ -206,6 +229,7 @@ func ReceiveFiles(config *ServerConfig) (*Server, error) {
 	// }
 	// log.Println("listen on kcp stream", config.Listen)
     server := &Server{config:config, kcpListener:slis, tcpListener:nil}
+	server.requests = make(map[*http.Request]*http.Request)
 	mux := http.NewServeMux()
 	// mux.Handle("/", http.FileServer(http.Dir("./")))
 	mux.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir(config.Root))))
