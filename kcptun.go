@@ -117,6 +117,7 @@ func (listener *KCPStreamListener) Accept() (net.Conn, error) {
 }
 
 func (listener *KCPStreamListener) Close() error{
+	log.Println("KCPStreamListener.Close")
 	return listener.kcpListener.Close()
 }
 
