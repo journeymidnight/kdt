@@ -13,7 +13,7 @@ Send Files to kcptun based HTTP server
 ## client side to send data
 
 ```
-/kdt client --remoteaddr 128.14.160.76:29900 bigfile
+./kdt client --remoteaddr 128.14.160.76:29900 bigfile
 ```
 
 ## tuning  
