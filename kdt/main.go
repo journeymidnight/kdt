@@ -22,7 +22,7 @@ func onProgress(client *kdt.Client, starttime time.Time, offset int64, transferr
 		usedTime := 1000.0 * float64(time.Since(starttime)) / float64(time.Second)
 		speed := float64(transferred) / usedTime
 		percent := float64(offset + transferred) * 100.0 / float64(total)
-		log.Printf("onProgress percent=%.02f%% totaltransfered=%d offset=%d transfered=%d total=%d usedtime=%.2fms speed=%.2fMB/s\n", percent, offset + transferred, offset, transferred, total, usedTime, speed)
+		log.Printf("onProgress percent=%.02f%% totaltransfered=%d offset=%d transfered=%d total=%d usedtime=%.2fms speed=%.2fKB/s\n", percent, offset + transferred, offset, transferred, total, usedTime, speed)
 	}
 }
 
