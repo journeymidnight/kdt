@@ -135,6 +135,11 @@ func CreateClientFlags() []cli.Flag {
 			Value: 1024,
 			Usage: "set receive window size(num of packets)",
 		},
+		cli.IntFlag{
+			Name:  "bandwidth",
+			Value: 0,
+			Usage: "set transfer bandwidth(num of Kbits)",
+		},
 	})
 }
 

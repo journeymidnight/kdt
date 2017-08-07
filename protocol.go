@@ -3,6 +3,7 @@ package kdt
 import (
     "encoding/json"
     "io"
+    "time"
 )
 
 type FileInfoResponse struct {
@@ -28,9 +29,9 @@ func (fi *FileInfoResponse) Encode() string {
     return string(buf)
 }
 
-type ProgressCallback func(int64, int64, int64)
+type ProgressCallback func(time.Time, int64, int64, int64)
 
-func NoopProgressCallback(offset, transferred, total int64) { }
+func NoopProgressCallback(starttime time.Time, offset, transferred, total int64) { }
 
 func Version() string {
     return "0.1"

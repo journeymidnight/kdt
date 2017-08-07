@@ -6,7 +6,7 @@ import (
     "log"
     "os"
 	"math/rand"
-    "git.letv.cn/ctp/kdt"
+    "github.com/journeymidnight/kdt"
 	"github.com/urfave/cli"
 )
 
@@ -32,8 +32,7 @@ func runClient(c *cli.Context) error {
 	err := config.Init(c)
     client := kdt.CreateClient(config)
 	ptimes := 0
-	starttime := time.Now()
-	client.Callback = func (offset, transferred, total int64) {
+	client.Callback = func (starttime time.Time, offset, transferred, total int64) {
 		onProgress(client, starttime, offset, transferred, total, ptimes)
 		ptimes += 1
 	}

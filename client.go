@@ -19,13 +19,34 @@ type ProgressReader struct {
 	size int64
 	offset int64
 	total int64
+	bandwidth int64
+	starttime time.Time
 }
 
 func (r *ProgressReader) Read(p []byte) (n int, err error) {
+	var delayTime int
+	if r.bandwidth > 0 {
+		delayTime = int(float64(1000000 * 32 * 1024 * 8) / float64(r.bandwidth))
+		usedTime := float64(time.Since(r.starttime)) / float64(time.Second)
+		if usedTime == 0 {
+			usedTime = 1
+		}
+		speed := float64(r.size * 8) / usedTime
+
+		var ratio = float64(speed) / float64(r.bandwidth)
+		if ratio > 1.05 {
+			delayTime += 10000;
+		} else if ratio < 0.95 && delayTime >= 10000 {
+			delayTime -= 10000;
+		} else if ratio <  0.95 {
+			delayTime = 0
+		}
+		time.Sleep(time.Duration(delayTime) * time.Microsecond)
+	}
 	n, err = r.reader.Read(p)
 	if n > 0 {
 		r.size += int64(n)
-		r.callback(r.offset, r.size, r.total)
+		r.callback(r.starttime, r.offset, r.size, r.total)
 	}
 	return n, err
 }
@@ -122,6 +143,8 @@ func (client *Client) doUploadFile(filepath, filename string, startpos int64) er
 	}
 	totalsize := fi.Size()
 	reader.total = totalsize
+	reader.starttime = time.Now()
+	reader.bandwidth = int64(client.config.Bandwidth * 1024)
 	contentrange := fmt.Sprintf("bytes %v-%v/%v", startpos, totalsize - 1, totalsize)
 	contentlen := strconv.FormatInt(totalsize - startpos, 10)
 	req.Header.Set("Content-Type", "application/octet-stream")

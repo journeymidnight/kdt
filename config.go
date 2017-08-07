@@ -34,6 +34,7 @@ type Config struct {
 	KeepAlive    int    `json:"keepalive"`
 	Log          string `json:"log"`
 	BufferSize   int    `json:"bufsize"`
+	Bandwidth    int    `json:"bandwidth"`
 	TransferID   string
 	ConfigFile   string
 }
@@ -78,6 +79,7 @@ func createConfig() *Config {
 		KeepAlive: 10,
 		Log: "",
 		BufferSize: 4096,
+		Bandwidth: 0,
 		ConfigFile: "",
 	}
 }
@@ -159,6 +161,7 @@ func initConfig(config *Config, c *cli.Context) error {
 	config.KeepAlive = c.Int("keepalive")
 	config.Log = c.String("log")
 	config.BufferSize = c.Int("bufsize")
+	config.Bandwidth = c.Int("bandwidth")
 	config.TransferID = c.String("transfer_id")
 
 	if c.String("c") != "" {
@@ -193,6 +196,7 @@ func (config *Config) logConfig() {
 	log.Println("sockbuf:", config.SockBuf)
 	log.Println("keepalive:", config.KeepAlive)
 	log.Println("bufsize:", config.BufferSize)
+	log.Println("bandwidth:", config.Bandwidth)
 }
 
 func (config *Config) CreateBlockCrypt() kcp.BlockCrypt {
@@ -285,6 +289,7 @@ func (config *Config) createCommonFlagSet() *flag.FlagSet {
 	set.IntVar(&config.KeepAlive, "keepalive", config.KeepAlive, "keepalive")
 	set.StringVar(&config.Log, "log", config.Log, "specify a log file to output, default goes to stderr")
 	set.IntVar(&config.BufferSize, "bufsize", config.BufferSize, "bufsize")
+	set.IntVar(&config.Bandwidth, "bandwidth", config.Bandwidth, "bandwidth")
 	set.StringVar(&config.ConfigFile, "conf", config.ConfigFile, "config from json file, which will override the command from shell")
 	set.StringVar(&config.TransferID, "transfer_id", config.TransferID, "transfer_id")
 	return set
