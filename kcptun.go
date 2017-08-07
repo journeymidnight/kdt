@@ -84,7 +84,7 @@ func (listener *KCPStreamListener) Accept() (net.Conn, error) {
 	conn.SetMtu(config.MTU)
 	conn.SetWindowSize(config.SndWnd, config.RcvWnd)
 	conn.SetACKNoDelay(config.AckNodelay)
-	conn.SetKeepAlive(config.KeepAlive)
+	//conn.SetKeepAlive(config.KeepAlive)
 
 	smuxConfig := smux.DefaultConfig()
 	smuxConfig.MaxReceiveBuffer = config.SockBuf
@@ -171,7 +171,7 @@ func dialKcp(config *ClientConfig, block kcp.BlockCrypt) (net.Conn, error) {
 	kcpconn.SetWindowSize(config.SndWnd, config.RcvWnd)
 	kcpconn.SetMtu(config.MTU)
 	kcpconn.SetACKNoDelay(config.AckNodelay)
-	kcpconn.SetKeepAlive(config.KeepAlive)
+	//kcpconn.SetKeepAlive(config.KeepAlive)
 
 	if err := kcpconn.SetDSCP(config.DSCP); err != nil {
 		log.Println("SetDSCP:", err, config.DSCP)
