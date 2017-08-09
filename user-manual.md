@@ -59,6 +59,20 @@ OPTIONS:
   -datashard
   -parityshard
 
-
-
+## 建议设置
+网络比较好的情况
+```
+kdt client: ./kdt server -l :4000  --datashard 0 --parityshard 0
+kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0 bigfile
+```
+网络有丢包的情况下，datashard和parityshard恢复为默认值， 如果速度不够增大些sndwnd和rcvwnd
+```
+kdt client: ./kdt server -l :4000  --rcvwnd 8192
+kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --sndwnd 8192  bigfile
+```
+或者
+```
+kdt client: ./kdt server -l :4000 --datashard 0 --parityshard 0 --rcvwnd 8192
+kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192  bigfile
+```
 
