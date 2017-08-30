@@ -1,15 +1,15 @@
 ## 快速入门
 
 ```
-kdt client: ./kdt server -l :4000
-kdt server: ./kdt client --remoteaddr 127.0.0.1:4000 bigfile
+kdt server: ./kdt server -l :4000
+kdt client: ./kdt client --remoteaddr 127.0.0.1:4000 bigfile
 ```
 上面的命令会在server端监听4000端口，client端通过连接server的4000端口传送文件名为bigfile的文件到server端  
 
 
 ## Usage
 
-```
+```shell
 $ ./kdt -h
 $ ./kdt client -h
 $ ./kdt server -h
@@ -42,16 +42,21 @@ OPTIONS:
 
 
 ## Basic Tuning Guide
+
 提高吞吐量
+
 ```
   在client端增加rcwnd， 在服务端增加sndwnd
 ```
+
 改善延迟
+
 ```
   改变传输模式. fast3 > fast2 > fast > normal > default
 ```
 
 ## 相等参数
+
 下面参数需要在server和client端设置相同的参数
   -key
   -crypt
@@ -60,19 +65,24 @@ OPTIONS:
   -parityshard
 
 ## 建议设置
+
 网络比较好的情况
-```
-kdt client: ./kdt server -l :4000  --datashard 0 --parityshard 0
-kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0 bigfile
-```
-网络有丢包的情况下，datashard和parityshard恢复为默认值， 如果速度不够增大些sndwnd和rcvwnd
-```
-kdt client: ./kdt server -l :4000  --rcvwnd 8192
-kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --sndwnd 8192  bigfile
-```
-或者
-```
-kdt client: ./kdt server -l :4000 --datashard 0 --parityshard 0 --rcvwnd 8192
-kdt server: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192  bigfile
+
+```shell
+kdt server: ./kdt server -l :4000  --datashard 0 --parityshard 0
+kdt client: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0 bigfile
 ```
 
+网络有丢包的情况下，datashard和parityshard恢复为默认值， 如果速度不够增大些sndwnd和rcvwnd
+
+```shell
+kdt server: ./kdt server -l :4000  --rcvwnd 8192
+kdt client: ./kdt client --remoteaddr 127.0.0.1:4000  --sndwnd 8192  bigfile
+```
+
+或者
+
+```shell
+kdt server: ./kdt server -l :4000 --datashard 0 --parityshard 0 --rcvwnd 8192
+kdt client: ./kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192  bigfile
+```
