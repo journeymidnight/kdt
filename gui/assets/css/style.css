@@ -1,0 +1,68 @@
+#optionBtn {
+    margin: 10px auto;
+    text-align: center;
+}
+#options {
+    /* height: 100px; */
+    border: 1px solid #eee;
+    display: none;
+    margin-top: 10px;
+    width:90%;
+    margin: 10px auto;
+}
+
+#progress {
+    border: 2px solid #eee;
+    margin: 10px auto;
+    width:90%;
+}
+
+#uploader {
+    width:90%;
+    margin: 10px auto;
+    position: relative;
+}
+#uploader form{
+    height: 200px;
+    border: 2px dashed #fff;
+    background-color:#cce5ff;
+    margin: 0;
+}
+
+#uploader form p{
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    line-height: 170px;
+    color: #ffffff;
+}
+
+#uploader form input{
+   position: absolute;
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 200px;
+   outline: none;
+   opacity: 0;
+}
+
+#uploader button{
+    margin-top:10px;
+    width: 100%;
+
+}
+
+#uploader .is_dragover {
+    outline-offset: -20px;
+    outline-color: #c8dadf;
+    background-color:black;
+}
+
+#messagezone {
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    text-align: center;
+    color:white;
+}
