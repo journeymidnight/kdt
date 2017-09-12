@@ -1,23 +1,19 @@
 {
-  "name": "electron-quick-start",
+  "name": "kdt",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A kdt gui",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out"
   },
   "repository": "https://github.com/journeymidnight/kdt",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
+  "keywords": [],
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "^1.7.6",
+    "electron-packager": "^9.0.1"
   },
   "dependencies": {
     "execa": "^0.8.0"

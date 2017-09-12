@@ -113,6 +113,8 @@ uploadBtn.addEventListener("click", function(){
     //STOP UPLOADING
     } else if (isUploading == true) {
         //TODO;
+    } else if (!fileNamePath) {
+        showErrorAlert("not specify a filename");
     }
 });
 
