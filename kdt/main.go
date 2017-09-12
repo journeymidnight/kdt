@@ -18,7 +18,7 @@ const (
 )
 
 func onProgress(client *kdt.Client, starttime time.Time, offset int64, transferred int64, total int64, ptimes int) {
-	if ptimes % 1000 == 1 {
+	if ptimes % 10 == 1 {
 		usedTime := 1000.0 * float64(time.Since(starttime)) / float64(time.Second)
 		speed := float64(transferred) / usedTime
 		percent := float64(offset + transferred) * 100.0 / float64(total)
