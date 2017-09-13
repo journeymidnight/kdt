@@ -1,4 +1,5 @@
 const execa = require('execa');
+const path = require('path');
 
 const startUploadRegex = /start upload/gm
 const percentRegex = /percent=(\d+\.\d+)%/gm;
@@ -9,7 +10,10 @@ const brokenRegex = /query file info no info/gm;
 const duplicatedRegex = /file is already uploaded/gm;
 const failedOpenRegex = /failed to open input file/gm;
 
-
+var kdtBinary = "kdt";
+if (process.platform === "windows") {
+	kdtBinary = "kdt.exe";
+}
 //kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192 
 function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressCallback) {
 	return new Promise((resolve, reject) => {
@@ -21,7 +25,9 @@ function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressC
 		if (crypt == "") {
 			crypt = "none";
 		}
-		var uploader = execa('kdt', 
+		console.log(path.join(__dirname, "vendor", kdtBinary));
+
+		var uploader = execa(path.join(__dirname, "vendor", kdtBinary),
 				['client',
 				'--key', key,
 				'--remoteaddr', remoteaddr, 
