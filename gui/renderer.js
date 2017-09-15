@@ -13,6 +13,7 @@ var optionDiv = document.getElementById('options');
 var uploadBtn = document.getElementById('uploadBtn');
 var optionBtn = document.querySelector("#optionBtn button");
 
+myConsole.log($(document));
 
 [ 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop' ].forEach( function( event )
 {
@@ -67,7 +68,6 @@ inputFile.addEventListener("change", (e)=>{
 });
 
 
-//TODO animation
 //if saved, hide the option div
 optionSubmitButton.addEventListener("click",function(e){
     e.preventDefault();
@@ -82,19 +82,21 @@ optionSubmitButton.addEventListener("click",function(e){
     //save the config/
     saveConfig(opts);
     //hide the options
-    optionDiv.style.display = "none";
-    optionBtn.style.display = "inline-block"
-
+    //optionDiv.style.display = "none";
+    $(optionDiv).slideUp();
 });
 
 //click the option button to show the options
 //and hide itself;
 optionBtn.addEventListener("click", function(){
-    //hide the option button itself
-    renderOptionHtml();
 
-    optionDiv.style.display = "block";
-    optionBtn.style.display = "none";
+    //$(optionDiv).slideToggle();
+    $(optionDiv).toggle({
+        start:function(){
+            renderOptionHtml();
+        }
+
+    });
 })
 
 var isUploading  = false;
@@ -228,3 +230,4 @@ function resetAlertProgressBarAndButton(){
     progressDiv.style.width = "0%";
     uploadBtn.innerHTML = "<i class='fa fa-cloud-upload'></i> Upload";
 }
+
