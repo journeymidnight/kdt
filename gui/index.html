@@ -5,50 +5,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KDT, A transfer tool</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
+    <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css" > -->
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/bulma.min.css">
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
-  <div id="optionBtn"><button class='btn btn-info'>options</button></div>
-  <div class="animated container-fluid" id="options"> 
-    <form class="form-horizontal" role="form">
-       <div class="form-group">
-          <label>Endpoint</label>
-          <input type="text" name="endpoint">
-       </div>
+  <div id="optionBtn">
+    <button class='button is-primary is-small'>options</button>
+  </div>
 
-       <div class="form-group">
-          <label>Password</label>
-          <input type="text" name="key">
-          <!-- <p class="help-block">Example block-level help text here.</p> -->
+  <div id="options"> 
+    <form>
+
+      <div class="field">
+        <label class='label is-small'>Endpoint</label>
+        <div class="control">
+          <input class="input is-small" type="text" name="endpoint">
         </div>
+      </div>
 
-        <div class="form-group">
-          <label>crypt</label>
-          <select class="form-control" name="crypt">
+      <div class="field">
+        <label class='label is-small'>Password</label>
+        <div class="control">
+          <input class="input is-small" type="text" name="key">
+        </div>
+      </div>
+
+        <div class="field">
+          <label class='label is-small'>crypt</label>
+          <div class="select is-small">
+            <select name="crypt">
               <option>none</option>
               <option>aes-128</option>
               <option>aes-192</option>
               <option>salsa20</option>
               <option>blowfish</option>
             </select>
+          </div>
         </div>
 
-        <div class="form-group">
-        <label >datashard</label>
-        <input type="number" value='0' name="datashard">
+        <div class="field">
+          <label class="label is-small">datashard</label>
+          <div class="control">
+            <input class="input is-small" type="number" value='0' name="datashard">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>parityshard</label>
-       <input type="number" value='0' name="parityshard">
-       </div>
+        <div class="field">
+          <label class="label is-small">parityshard</label>
+          <div class="control">
+            <input class="input is-small" type="number" value='0' name="parityshard">
+          </div>
+        </div>
 
-      <button class="btn btn-info" id="submitConfig" type="submit">Save</button>
+      <div class="control">
+        <button class="button is-info is-small" id="submitConfig" type="submit">Save</button>
+      </div>
     </form>
   </div>
 
@@ -57,16 +73,14 @@
       <input type="file">
       <p>drag your files here</p>
     </form>
-     <button id="uploadBtn" class="btn btn-info" type="submit"><i class='fa fa-cloud-upload'></i> Upload</button>
+     <button id="uploadBtn" class="button is-primary is-fullwidth" type="submit"><i class='fa fa-cloud-upload'></i> Upload</button>
   </div>
 
-  <div class="progress" id="progress"> 
-          <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 0%;">
-            <span class="sr-only">0% Complete</span>
-          </div>
-  </div>
+  <progress class="progress is-info" id="progress" value="0" max="100"> 
+  </progress>
 
-  <div id="messagezone" role="alert"> </div>
+
+<div id="messagezone" class="notification is-primary"></div>
 </body>
 
 <script src="renderer.js"></script>

@@ -1,9 +1,9 @@
+
 #optionBtn {
     margin: 10px auto;
     text-align: center;
 }
 #options {
-    /* height: 100px; */
     border: 1px solid #eee;
     display: none;
     margin-top: 10px;
@@ -14,6 +14,7 @@
 #progress {
     border: 2px solid #eee;
     margin: 10px auto;
+    margin-top:20px;
     width:90%;
 }
 
@@ -25,14 +26,13 @@
 #uploader form{
     height: 200px;
     border: 2px dashed #fff;
-    background-color:#cce5ff;
-    margin: 0;
+    background-color:#3273DC;
 }
 
 #uploader form p{
     width: 100%;
     height: 100%;
-    text-align: left;
+    text-align: center;
     line-height: 170px;
     color: #ffffff;
 }
@@ -65,4 +65,5 @@
     width:100%;
     text-align: center;
     color:white;
+    display: none;
 }

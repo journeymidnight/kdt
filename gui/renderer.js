@@ -120,19 +120,23 @@ uploadBtn.addEventListener("click", function(){
     }
 });
 
-var progressDiv = document.querySelector("div .progress-bar");
+var progressDiv = document.getElementById('progress');
+
 var messagezoneDiv = document.querySelector("#messagezone");
 
 ipcRenderer.on("file:progress", (event, progress)=>{
     var p = Math.floor(progress);
-    progressDiv.style.width = `${p}%`;
+    //progressDiv.style.width = `${p}%`;
+    progressDiv.value=p;
+
 });
 
 ipcRenderer.on("file:result", (event, msg)=>{
     myConsole.log("result:" + msg);
     if (msg == "success") {
-        progressDiv.style.width = "100%";
+        //progressDiv.style.width = "100%";
         //messagezoneDiv.innerHTML = "success";
+        progressDiv.value = 100;
         showSuccessAlert("Upload Success");
     } else {
         showErrorAlert(msg);
@@ -206,28 +210,30 @@ function renderOptionHtml() {
 }
 //type
 function showSuccessAlert(msg) {
-    messagezoneDiv.classList = [];
-    messagezoneDiv.classList.add
-    messagezoneDiv.classList.add("alert-success");
+    messagezoneDiv.classList = ['notification'];
+    messagezoneDiv.classList.add("is-success");
     messagezoneDiv.innerHTML = msg;
+    $(messagezoneDiv).show();
 }
 
 function showErrorAlert(msg) {
-    messagezoneDiv.classList = [];
-    messagezoneDiv.classList.add("alert-danger");
+    messagezoneDiv.classList = ['notification'];
+    messagezoneDiv.classList.add("is-danger");
     messagezoneDiv.innerHTML = msg;
+    $(messagezoneDiv).show();
 }
 
 function showInfoAlert(msg) {
-    messagezoneDiv.classList = [];
-    messagezoneDiv.classList.add("alert-info");
+    messagezoneDiv.classList = ['notification'];
+    messagezoneDiv.classList.add("is-info");
     messagezoneDiv.innerHTML = msg;
+    $(messagezoneDiv).show();
 }
 
 function resetAlertProgressBarAndButton(){
-    messagezoneDiv.classList = [];
-    messagezoneDiv.innerHTML = "";
-    progressDiv.style.width = "0%";
+    $(messagezoneDiv).hide();
+
+    progressDiv.value = 0;
     uploadBtn.innerHTML = "<i class='fa fa-cloud-upload'></i> Upload";
 }
 
