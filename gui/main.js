@@ -13,19 +13,25 @@ const {kdt} = require('./kdt');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let uploader = null;
 
 ipcMain.on("file:submit", (event, msg) => {
   const{path, config} = msg;
-  var uploader = kdt(config.endpoint, config.datashard, config.parityshard, config.key, config.crypt, path, progress=>{
+  uploader = kdt(config.endpoint, config.datashard, config.parityshard, config.key, config.crypt, path, progress=>{
     mainWindow.webContents.send("file:progress", progress);
   });
-  uploader
-  .then(()=>{
+  uploader.then(()=>{
     mainWindow.webContents.send("file:result", "success");
-  })
-  .catch((errmsg) =>{
+    uploader = null;
+  }).catch((errmsg) =>{
     mainWindow.webContents.send("file:result", errmsg);
+    uploader = null;
   });
+});
+
+ipcMain.on("file:kill",(event,msg)=>{
+  if (uploader)
+    uploader.kill();
 });
 
 function createWindow () {

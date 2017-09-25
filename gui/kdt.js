@@ -16,7 +16,18 @@ if (process.platform === "windows") {
 }
 //kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192 
 function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressCallback) {
-	return new Promise((resolve, reject) => {
+	var uploader = execa(path.join(__dirname, "vendor", kdtBinary),
+			['client',
+			'--key', key,
+			'--remoteaddr', remoteaddr, 
+			'--datashard', datashard,
+			'--parityshard', parityshard,
+			'--sndwnd', '8192',
+			'--crypt', crypt,
+			filename,
+			]);
+
+	var wrappedPromise = new Promise((resolve, reject) => {
 		let success = false;
 		let errorType = "";
 		if (key == "") {
@@ -27,16 +38,6 @@ function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressC
 		}
 		console.log(path.join(__dirname, "vendor", kdtBinary));
 
-		var uploader = execa(path.join(__dirname, "vendor", kdtBinary),
-				['client',
-				'--key', key,
-				'--remoteaddr', remoteaddr, 
-				'--datashard', datashard,
-				'--parityshard', parityshard,
-				'--sndwnd', '8192',
-				'--crypt', crypt,
-				filename,
-				]);
 
 		//kdt use stderr 
 		uploader.stderr.on("data", data=>{
@@ -72,14 +73,22 @@ function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressC
 			}
 		});
 
-		uploader.on('exit', () => {
+		uploader.on('close', (code,signal) => {
 			if (success === true) {
 				resolve();
 			} else {
-				reject(errorType);
+				if (signal == 'SIGTERM')
+					reject("killed");
+				else
+					reject(errorType);
 			}
 		});
 	});
+
+	wrappedPromise.kill = function(){
+		uploader.kill();
+	}
+	return wrappedPromise;
 	
 }
 exports.kdt = kdt;

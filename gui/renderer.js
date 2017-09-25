@@ -13,8 +13,6 @@ var optionDiv = document.getElementById('options');
 var uploadBtn = document.getElementById('uploadBtn');
 var optionBtn = document.querySelector("#optionBtn button");
 
-myConsole.log($(document));
-
 [ 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop' ].forEach( function( event )
 {
     document.addEventListener( event, function( e )
@@ -101,8 +99,10 @@ optionBtn.addEventListener("click", function(){
 
 var isUploading  = false;
 
+ipcRenderer.send('file:fuck');
 //upload the file through kdt
 uploadBtn.addEventListener("click", function(){
+    ipcRenderer.send('file:fuck');
     //read config from local storage
     var config  = loadConfig();
     //START UPLOADING
@@ -115,6 +115,7 @@ uploadBtn.addEventListener("click", function(){
     //STOP UPLOADING
     } else if (isUploading == true) {
         //TODO;
+        ipcRenderer.send('file:kill');
     } else if (!fileNamePath) {
         showErrorAlert("not specify a filename");
     }
@@ -138,13 +139,20 @@ ipcRenderer.on("file:result", (event, msg)=>{
         //messagezoneDiv.innerHTML = "success";
         progressDiv.value = 100;
         showSuccessAlert("Upload Success");
+    } else if (msg == "killed") {
+        showInfoAlert("paused");
+         var isPaused = true;
     } else {
         showErrorAlert(msg);
     }
 
-    uploadBtn.innerHTML = "<i class='fa fa-cloud-upload'></i> Upload One More?";
-    fileNamePath = "";
-    inputFileMessage.innerHTML = "<p>drag your files here </p>";
+    if (isPaused == true) {
+        uploadBtn.innerHTML = "<i class='fa fa-cloud-upload'></i> Resume upload?";
+    } else {
+        uploadBtn.innerHTML = "<i class='fa fa-cloud-upload'></i> Upload one More?";
+        fileNamePath = "";
+        inputFileMessage.innerHTML = "<p>drag your files here </p>";
+    }
     isUploading = false;
 
 });
