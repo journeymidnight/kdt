@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   build:
-    image: golang:latest
+    image: thesues/golang-nodejs
     commands:
       - go get ./...
-      - bash kdt/build.sh
+      - bash build.sh

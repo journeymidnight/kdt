@@ -13,7 +13,10 @@ const failedOpenRegex = /failed to open input file/gm;
 var kdtBinary = "kdt";
 if (process.platform === "windows") {
 	kdtBinary = "kdt.exe";
+} else if (process.platform === "darwin") {
+	kdtBinary = "kdt-mac";
 }
+
 //kdt client --remoteaddr 127.0.0.1:4000  --datashard 0 --parityshard 0  --sndwnd 8192 
 function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressCallback) {
 	var uploader = execa(path.join(__dirname, "vendor", kdtBinary),
