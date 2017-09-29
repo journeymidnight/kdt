@@ -30,7 +30,7 @@ function kdt(remoteaddr, datashard, parityshard, key, crypt, filename, progressC
 	var wrappedPromise = new Promise((resolve, reject) => {
 		let success = false;
 		let errorType = "";
-		if (key == "") {
+		if (key.trim() == "") {
 			key = "none";
 		}
 		if (crypt == "") {

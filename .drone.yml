@@ -1,0 +1,10 @@
+workspace:
+  base: /go
+  path: src/github.com/journeymidnight/kdt
+
+pipeline:
+  build:
+    image: golang:latest
+    commands:
+      - go get ./...
+      - bash kdt/build.sh

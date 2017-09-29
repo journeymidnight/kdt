@@ -39,6 +39,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 400, 
     height: 500, 
+    resizable:false
   })
 
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
