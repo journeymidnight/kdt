@@ -11,16 +11,26 @@ GOOS=linux go build -o bin/kdt kdt/main.go
 tar zcvf kdt-linux.tar.gz bin/kdt
 
 mkdir gui/vendor 
+
+#build for mac
 cp bin/kdt-mac bin/kdt.exe gui/vendor/
 
 pushd gui
 npm install
 electron-packager . --overwrite --platform=darwin --arch=x64 --out=out
-electron-packager . --overwrite --platform=win32 --arch=x64 --out=out
+popd
 
-pushd out
+
+#build for win
+rm gui/vendor/kdt-mac
+cp bin/kdt.exe gui/vendor/
+pushd gui
+electron-packager . --overwrite --platform=win32 --arch=x64 --out=out
+popd
+
+
+pushd gui/out
 tar zcf kdt-win32-x64.tar.gz kdt-win32-x64
 tar zcf kdt-darwin-x64.tar.gz kdt-darwin-x64
 popd
 
-popd
