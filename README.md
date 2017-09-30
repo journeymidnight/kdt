@@ -1,4 +1,6 @@
 
+[![Build Status](http://172.104.77.17:8001/api/badges/journeymidnight/kdt/status.svg)](http://172.104.77.17:8001/journeymidnight/kdt)
+
 # quick start
 
 Send Files to kcptun based HTTP server

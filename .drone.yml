@@ -8,3 +8,8 @@ pipeline:
     commands:
       - go get ./...
       - bash build.sh
+  github_release:
+    image: plugins/github-release
+    api_key:
+    files: src/github.com/journeymidnight/kdt/*.tar.gz
+    files: src/github.com/journeymidnight/kdt/gui/out/*.tar.gz

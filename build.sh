@@ -16,6 +16,10 @@ pushd gui
 npm install
 npm run package:mac
 npm run package:win
+
+pushd out
+tar zcvf kdt-win32-x64.tar.gz kdt-win32-x64
+tar zcvf kdt-darwin-x64.tar.gz kdt-darwin-x64
 popd
 
-
+popd
