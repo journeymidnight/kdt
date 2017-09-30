@@ -6,10 +6,14 @@ pipeline:
   build:
     image: thesues/golang-nodejs
     commands:
-      - go get ./...
-      - bash build.sh
+      - "go get ./..."
+      - "bash build.sh"
   github_release:
-    image: plugins/github-release
-    api_key:
-    files: src/github.com/journeymidnight/kdt/*.tar.gz
-    files: src/github.com/journeymidnight/kdt/gui/out/*.tar.gz
+          image: plugins/github-release
+          files:
+             - "gui/out/*.tar.gz"
+             - "*.tar.gz"
+          secrets: [github_token]
+          when:
+                event: [tag]
+

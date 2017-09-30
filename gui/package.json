@@ -4,17 +4,14 @@
   "description": "A kdt gui",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune --ignore=. --ignore=dist --out=out",
-    "package:win": "electron-packager . --overwrite --platform=win32 --arch=x64 --prune --ignore=. --ignore=dist --out=out"
+    "start": "electron ."
   },
   "repository": "https://github.com/journeymidnight/kdt",
   "keywords": [],
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.7.6",
-    "electron-packager": "^9.0.1"
+    "electron": "^1.7.6"
   },
   "dependencies": {
     "execa": "^0.8.0"

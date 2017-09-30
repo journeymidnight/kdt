@@ -10,16 +10,17 @@ echo "BUIDING for linux"
 GOOS=linux go build -o bin/kdt kdt/main.go
 tar zcvf kdt-linux.tar.gz bin/kdt
 
-mkdir gui/vendor && cp bin/kdt-mac bin/kdt bin/kdt.exe gui/vendor/
+mkdir gui/vendor 
+cp bin/kdt-mac bin/kdt.exe gui/vendor/
 
 pushd gui
 npm install
-npm run package:mac
-npm run package:win
+electron-packager . --overwrite --platform=darwin --arch=x64 --out=out
+electron-packager . --overwrite --platform=win32 --arch=x64 --out=out
 
 pushd out
-tar zcvf kdt-win32-x64.tar.gz kdt-win32-x64
-tar zcvf kdt-darwin-x64.tar.gz kdt-darwin-x64
+tar zcf kdt-win32-x64.tar.gz kdt-win32-x64
+tar zcf kdt-darwin-x64.tar.gz kdt-darwin-x64
 popd
 
 popd
