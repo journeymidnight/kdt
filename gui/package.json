@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack":"electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --prune"
+    "pack": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --prune"
   },
   "repository": "https://github.com/journeymidnight/kdt",
   "keywords": [],

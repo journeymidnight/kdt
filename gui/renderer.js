@@ -134,6 +134,7 @@ ipcRenderer.on("file:progress", (event, progress)=>{
 
 ipcRenderer.on("file:result", (event, msg)=>{
     myConsole.log("result:" + msg);
+    var isPaused = false;
     if (msg == "success") {
         //progressDiv.style.width = "100%";
         //messagezoneDiv.innerHTML = "success";
@@ -141,9 +142,10 @@ ipcRenderer.on("file:result", (event, msg)=>{
         showSuccessAlert("Upload Success");
     } else if (msg == "killed") {
         showInfoAlert("paused");
-         var isPaused = true;
+        isPaused = true;
     } else {
         showErrorAlert(msg);
+	isPaused = false;
     }
 
     if (isPaused == true) {

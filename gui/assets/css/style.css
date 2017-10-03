@@ -60,10 +60,9 @@
 }
 
 #messagezone {
-    position: fixed;
-    bottom: 0;
     width:100%;
     text-align: center;
     color:white;
     display: none;
+    margin-top:10px;
 }
