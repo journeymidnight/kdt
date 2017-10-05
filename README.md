@@ -1,5 +1,5 @@
 
-[![Build Status](http://172.104.77.17:8001/api/badges/journeymidnight/kdt/status.svg)](http://172.104.77.17:8001/journeymidnight/kdt)
+[![Build Status](http://104.225.238.174:8001/api/badges/journeymidnight/kdt/status.svg)](http://104.225.238.174:8001/journeymidnight/kdt)
 
 # quick start
 
