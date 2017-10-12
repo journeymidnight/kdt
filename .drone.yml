@@ -9,11 +9,10 @@ pipeline:
       - "go get ./..."
       - "bash build.sh"
   github_release:
-          image: plugins/github-release
-          files:
-             - "gui/out/*.tar.gz"
-             - "*.tar.gz"
-          secrets: [github_token]
-          when:
-                event: [tag]
-
+    image: plugins/github-release
+    files:
+      - "gui/out/*.tar.gz"
+      - "*.tar.gz"
+    secrets: [github_token]
+    when:
+      event: [tag]
