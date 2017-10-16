@@ -1,0 +1,24 @@
+sudo: required 
+dist: trusty    
+language: go
+go:
+  - 1.8
+before_install:
+  - "curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -"
+  - "sudo apt-get update && sudo apt-get install -y --no-install-recommends nodejs"
+  - "sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y --no-install-recommends wine wine1.6-i386"
+  - "sudo npm install electron-packager -g"
+script:
+  - "go get ./..." 
+  - "bash build.sh"
+deploy:
+  provider: releases
+  api_key:
+    secure: "ByDTAF+RGFTTZ0TcFPYsXD3dc3mKi2rLMXyVjUuWZRkR2nZKIXv1cmlfVI3knlp1kEzb2gti1zvoYSM5/0Oop6kBalN2xt6mTnjlRjC41N9/l1nwC6v7mxjU18NzmDMFpr14WPM/u8+1Zek+o5OHmfudEA6ra428caaf6k7bfQZE+baFRjjv0eX1iquLFWUSZ1LdruQM36nFjHuMbs/G5eZOQHCdNV2T1ORiZXiyFqScg5jfLG3fK2ou5CDA9cX0I2GRC89IPzEzWXkV4KVrEx8UiEJimJiai1ChxHXwfhfxu3/vZLY+WySe8NBQtKxTLTyiMhILDgFrZJA37g3ndsUW/TuiKnFSOZct7iP135Ezg/9SYzjoUpZtU2dJU2qmshdItS4FPMCNhNNDl/FkwQoct5g3cLQWFtu+Cd9u9O1gkUwGOPUTGUMx5GTeoK+14xHce9wlTNoX08Ek1NliFTIddCfIDZgX/2trpsMMrigbcoommsIw8il7gZFTXyVnJeUeB0c+VEPC9RwD6WZwXQix+hGCN3yOC+8s1TguOVhfb4tMHZ4VMHOCfRtGSGpsarzBG2644yd3fkCczELWR2gkXNx1hxiO4Nngxf5yzU8oFtwy6FR3QbMoTASZDqGUwMiUAVu/QSgtkpLNggNhxQDP7UKlLb5EQyqT2u9kmH8="
+  file_glob: true
+  file:
+    - "gui/out/*.tar.gz"
+    - "*.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
