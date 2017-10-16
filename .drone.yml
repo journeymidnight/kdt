@@ -9,12 +9,6 @@ pipeline:
       - "go get ./..."
       - "bash build.sh"
 
-  pushbear:
-    image: thesues/drone-pushbear
-    secrets: [sendkey]
-    when:
-      status: [success, failure]
-
   github_release:
     image: plugins/github-release
     files:
